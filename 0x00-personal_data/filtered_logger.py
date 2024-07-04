@@ -6,11 +6,13 @@ import re
 
 def filter_datum(fields: List[str],
                  redaction: str,
-                 message: str,
-                 seperator: str) -> str:
-    """function that tries to replicate the logger function"""
-    data = message.split(';')
-    for idx, item in enumerate(data):
-        if item.split('=')[0] in fields:
-            data[idx] = item.replace(item.split('=')[1], redaction)
-    return f"{seperator}".join(data)
+                 message: str, separator: str) -> str:
+    """Redacts specified fields in a message using regex."""
+    pattern = r'(\w+)=([^;]+)'
+    return re.sub(pattern,
+                  lambda match:
+                  f"{match.group(1)}={redaction}{separator}"
+                  if match.group(1) in fields
+                  else f"{match.group(0)}{separator}",
+                  message
+                  )
