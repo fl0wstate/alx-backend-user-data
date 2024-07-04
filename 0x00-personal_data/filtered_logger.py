@@ -8,11 +8,11 @@ def filter_datum(fields: List[str],
                  redaction: str,
                  message: str, separator: str) -> str:
     """Redacts specified fields in a message using regex."""
-    pattern = r'(\w+)=([^;]+)'
-    return re.sub(pattern,
-                  lambda match:
-                  f"{match.group(1)}={redaction}{separator}"
-                  if match.group(1) in fields
-                  else f"{match.group(0)}{separator}",
-                  message
-                  )
+    def match_handler(match: str) -> str:
+        """function that handles the matching pattern"""
+        field, value, sep = match.groups()
+        if field in fields:
+            return f"{field}={redaction}{seperator}"
+        else:
+            return f"{field}={value}{seperator}"
+    return re.sub(r'(\w+)=([^;]+)(.)', match_handler, message)
