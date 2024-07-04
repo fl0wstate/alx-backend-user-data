@@ -1,1 +1,0 @@
-# Handling personal data $$ loggin
