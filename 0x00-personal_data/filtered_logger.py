@@ -6,7 +6,7 @@ import re
 
 def filter_datum(fields: List[str],
                  redaction: str,
-                 message: str, separator: str) -> str:
+                 message: str, seperator: str) -> str:
     """Redacts specified fields in a message using regex."""
     def match_handler(match: str) -> str:
         """function that handles the matching pattern"""
