@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Mock function of a logger builtin function"""
 from typing import List
+import logging
 import re
 
 
