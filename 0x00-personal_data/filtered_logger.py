@@ -62,15 +62,15 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
             user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
             password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
             host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-            database=os.getenv('PERSONAL_DATA_NAME', 'holberton')
+            database=os.getenv('PERSONAL_DATA_NAME')
     )
 
 
 def main() -> None:
     """Main function implementation of both logger and mysql_connect"""
-    conn = get_db()
-    cursor = conn.cursor(dictionary=True)
-    cursor.execute('SELECT * FROM users')
+    db_conn = get_db()
+    cursor = db_conn.cursor(dictionary=True)
+    cursor.execute('SELECT * FROM users;')
     make_log = get_logger()
 
     for row in cursor:
@@ -78,7 +78,7 @@ def main() -> None:
             make_log.info(f"{key}={val}; ")
 
     cursor.close()
-    conn.close()
+    db_conn.close()
 
 
 if __name__ == '__main__':
