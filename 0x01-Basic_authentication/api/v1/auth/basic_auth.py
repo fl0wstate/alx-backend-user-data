@@ -3,6 +3,7 @@
 class that inherits from Auth class"""
 
 from .auth import Auth
+from typing import TypeVar
 from re import search
 import base64
 
@@ -60,5 +61,26 @@ class BasicAuth(Auth):
 
     def user_object_from_credentials(
             self, user_email: str, user_pwd: str) -> TypeVar('User'):
-        """Attaing data from the user_database"""
-        pass
+        """Retrives the user credentials according to the param passed
+            this depends if the credentials are valid both email and
+            pwd
+        Return:
+            User.firsr_name (str)
+            User.last_name (str)
+            """
+
+        if user_email is None or not isinstance(user_email, str):
+            return None
+        if user_pwd is None or not isinstance(user_pwd, str):
+            return None
+
+        try:
+            from models.user import User
+            users = User.search({"email": user_email})
+            if not users:
+                return None
+            for user in users:
+                if user.is_valid_password(user_pwd):
+                    return user
+        except Exception:
+            return None
