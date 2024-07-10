@@ -9,6 +9,10 @@ class Auth:
     """authentication class handler"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Identifies the paths that are to be excluded"""
+        if path is None:
+            return True
+        if excluded_paths is None:
+            return True
         try:
             if path:
                 if not path.endswith('/'):
