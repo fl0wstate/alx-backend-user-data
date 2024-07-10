@@ -2,6 +2,7 @@
 """Class that manages the user authentication"""
 from flask import request
 from typing import List, TypeVar
+import fnmatch
 
 
 class Auth:
@@ -11,7 +12,11 @@ class Auth:
         if path is not None:
             if not path.endswith('/'):
                 path += '/'
-            if path in excluded_paths:
+
+        for pattern in excluded_paths:
+            if not pattern.endswith('/') and not pattern.endswith('*'):
+                pattern += '/'
+            if fnmatch.fnmatch(path, pattern):
                 return False
         return True
 
