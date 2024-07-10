@@ -8,11 +8,22 @@ class Auth:
     """authentication class handler"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Identifies the paths that are to be excluded"""
-        return False
+        if path is not None:
+            if not path.endswith('/'):
+                path += '/'
+            if path in excluded_paths:
+                return False
+        return True
 
     def authorization_header(self, request=None) -> str:
-        """Returns None at the moment"""
-        return None
+        """Grants access to the request
+            if authorization_header is present
+        """
+        if request is None:
+            return None
+        if 'Authorization' not in request.headers:
+            return None
+        return request.headers['Authorization']
 
     def current_user(self, request=None) -> TypeVar('User'):
         """Returns None at the moment"""

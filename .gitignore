@@ -1,0 +1,5 @@
+*.pyc
+*__pycache__
+setup.sh
+test.py
+main_0.py
