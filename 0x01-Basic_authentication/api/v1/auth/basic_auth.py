@@ -89,7 +89,7 @@ class BasicAuth(Auth):
         """Authenitcates the user credentials using all the previous defined
         methods above"""
         super().current_user(request)
-        encoded_key =  self.extract_base64_authorization_header(
+        encoded_key = self.extract_base64_authorization_header(
                 self.authorization_header(request))
         decoded_key = self.decode_base64_authorization_header(encoded_key)
         user_email, user_pwd = self.extract_user_credentials(decoded_key)
