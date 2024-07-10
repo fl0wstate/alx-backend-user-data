@@ -9,16 +9,17 @@ class Auth:
     """authentication class handler"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
         """Identifies the paths that are to be excluded"""
-        if path is not None:
-            if not path.endswith('/'):
-                path += '/'
-
-        for pattern in excluded_paths:
-            if not pattern.endswith('/') and not pattern.endswith('*'):
-                pattern += '/'
-            if fnmatch.fnmatch(path, pattern):
-                return False
-        return True
+        try:
+            if path:
+                if not path.endswith('/'):
+                    path += '/'
+            for pattern in excluded_paths:
+                if not pattern.endswith('/') and not pattern.endswith('*'):
+                    pattern += '/'
+                if fnmatch.fnmatch(path, pattern):
+                    return False
+        except Exception:
+            return True
 
     def authorization_header(self, request=None) -> str:
         """Grants access to the request
