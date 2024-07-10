@@ -13,16 +13,17 @@ class Auth:
             return True
         if excluded_paths is None:
             return True
-        try:
-            if path:
-                if not path.endswith('/'):
-                    path += '/'
-            for pattern in excluded_paths:
-                if not pattern.endswith('/') and not pattern.endswith('*'):
-                    pattern += '/'
-                if fnmatch.fnmatch(path, pattern):
-                    return False
-        except Exception:
+        if len(excluded_paths) == 0:
+            return True
+
+        if not path.endswith('/'):
+            path += '/'
+        for pattern in excluded_paths:
+            if not pattern.endswith('/') or not pattern.endswith('*'):
+                pattern += '/'
+            if fnmatch.fnmatch(path, pattern):
+                return False
+
             return True
 
     def authorization_header(self, request=None) -> str:
