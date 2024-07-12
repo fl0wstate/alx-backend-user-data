@@ -21,16 +21,16 @@ def session_handler():
         passwd_ = request.form.get('password')
         print('here')
         if email_ is None:
-            return jsonify({ "error": "email missing" }), 400
+            return jsonify({"error": "email missing"}), 400
         if passwd_ is None:
-            return jsonify({ "error": "password missing" }), 400
+            return jsonify({"error": "password missing"}), 400
         try:
             from models.user import User
 
             found_users = User.search({'email': email_})
             if found_users is None:
                 return jsonify(
-                        { "error": "no user found for this email" }
+                        {"error": "no user found for this email"}
                         ), 404
             for user in found_users:
                 if user.is_valid_password(passwd_):
@@ -49,6 +49,6 @@ def session_handler():
                     return captured_response
 
                 else:
-                    return jsonify({ "error": "wrong password" }), 401
+                    return jsonify({"error": "wrong password"}), 401
         except Exception:
             return None

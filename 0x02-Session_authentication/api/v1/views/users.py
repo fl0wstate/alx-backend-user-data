@@ -26,17 +26,17 @@ def view_one_user(user_id: str = None) -> str:
       - 404 if the User ID doesn't exist
     """
     # Task 0
+    if user_id = "me":
+        if request.create_user is None:
+            abort(404)
+        return jsonify(request.create_user.to_json())
+
     if user_id is None:
-        abort(404)
-    if user_id == 'me' and request.create_user is None:
         abort(404)
     user = User.get(user_id)
     if user is None:
         abort(404)
-    if user_id == 'me' and request.create_user is not None:
-        user = user.to_json()
-
-    return jsonify(user)
+    return jsonify(user.to_json())
 
 
 @app_views.route('/users/<user_id>', methods=['DELETE'], strict_slashes=False)
