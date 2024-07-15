@@ -3,6 +3,8 @@
 Route module for the API
 """
 from os import getenv
+
+from flask.cli import re
 from api.v1.auth.auth import Auth
 from api.v1.views import app_views
 from flask import Flask, jsonify, abort, request
@@ -18,9 +20,6 @@ auth = None
 if os.getenv('AUTH_TYPE') == 'basic_auth':
     from api.v1.auth.basic_auth import BasicAuth
     auth = BasicAuth()
-elif os.getenv('AUTH_TYPE') == 'session_auth':
-    from api.v1.auth.session_auth import SessionAuth
-    auth = SessionAuth()
 else:
     from api.v1.auth.auth import Auth
     auth = Auth()
@@ -53,19 +52,19 @@ def before_request():
     before making the request"""
     excluded_paths = ['/api/v1/status/',
                       '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/',
-                      '/api/v1/auth_session/login/'
+                      '/api/v1/forbidden/'
                       ]
     if auth:
-        if auth.authorization_header(request) is None:
-            if auth.session_cookie(request) is None:
+        if auth.require_auth(request.path, excluded_paths):
+            if auth.authorization_header(request) is None:
                 abort(401)
-        request.current_user = auth.current_user(request)
-        if auth.current_user(request) is None:
-            abort(403)
+            current_user = auth.authorization_header(request)
+            if current_user is None:
+                abort(403)
+            request.current_user = current_user
 
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port)
+    app.run(host=host, port=port, debug=True)
