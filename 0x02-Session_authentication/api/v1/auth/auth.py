@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 """Class that manages the user authentication"""
 from flask import request
-from os import getenv
 from typing import List, TypeVar
 import fnmatch
 
@@ -43,13 +42,3 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """Returns None at the moment"""
         return None
-
-    def session_cookie(self, request=None) -> str:
-        """Returns a cookie value from a request made"""
-        if request is None:
-            return None
-        try:
-            cookie_dict = request.cookies
-            return cookie_dict.get(getenv('SESSION_NAME'))
-        except Exception:
-            return None
