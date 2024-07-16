@@ -1,4 +1,3 @@
-
 #!/usr/bin/env python3
 """Creating a session cookie"""
 
