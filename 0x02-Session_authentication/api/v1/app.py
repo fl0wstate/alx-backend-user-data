@@ -56,24 +56,28 @@ def forbidden(error) -> str:
 
 @app.before_request
 def before_request():
-    """Function that will run just right
-    before making the request"""
-    excluded_paths = ['/api/v1/status/',
-                      '/api/v1/unauthorized/',
-                      '/api/v1/forbidden/',
-                      '/app/v1/auth_session/login'
-                      ]
-    if auth:
-        if auth.require_auth(request.path, excluded_paths):
-            if auth.authorization_header(request) is None:
-                abort(401)
-            current_user = auth.authorization_header(request)
-            if current_user is None:
-                abort(403)
-            request.current_user = current_user
+    """ Capturing all the request before making a 
+    response to the client
+    """
+    if not auth:
+        return
+    auth_paths = [
+            '/api/v1/status/',
+            '/api/v1/unauthorized/',
+            '/api/v1/forbidden/',
+            '/api/v1/auth_session/login/'
+            ]
+    if not auth.require_auth(request.path, auth_paths):
+        return
+    if not auth.authorization_header(request): 
+        abort(401)
+    current_user = auth.current_user(request)
+    if not current_user:
+        abort(403)
+    request.current_user = current_user
 
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
     port = getenv("API_PORT", "5000")
-    app.run(host=host, port=port, debug=True)
+    app.run(host=host, port=port)
