@@ -56,7 +56,7 @@ def forbidden(error) -> str:
 
 @app.before_request
 def before_request():
-    """ Capturing all the request before making a 
+    """ Capturing all the request before making a
     response to the client
     """
     if not auth:
@@ -69,7 +69,7 @@ def before_request():
             ]
     if not auth.require_auth(request.path, auth_paths):
         return
-    if not auth.authorization_header(request): 
+    if not auth.authorization_header(request):
         abort(401)
     current_user = auth.current_user(request)
     if not current_user:
