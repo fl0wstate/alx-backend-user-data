@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
+from collections import UserString
 from typing import Any, Dict
 from sqlalchemy import create_engine
 from sqlalchemy.orm.exc import NoResultFound
@@ -39,9 +40,20 @@ class DB:
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
+        self._session.close()
         return user
 
-    def find_user_by(self, **kwargs: Dict[str, Any]) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """Finds users from the database
         based on the keyword argumnent passed"""
         return self._session.query(User).filter_by(**kwargs).one()
+
+    def update_user(self, user_id: int, **kwargs: Dict[str, Any]) -> None:
+        """Updates the user matching the user_id passed
+        Updates depends on the arbitary keywords args
+        given that will be updated"""
+        
+        user = self.find_user_by(id=user_id)
+
+        for key, val in kwargs.items():
+            setattr(user, key, val)
