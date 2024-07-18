@@ -13,10 +13,10 @@ def session_login_handler():
     """Handles the session creation and login of users"""
     if request.method == "POST":
         email = request.form.get('email')
-        paswd = request.form.get('password')
-
         if not email:
             return jsonify({"error": "email missing"}), 400
+
+        paswd = request.form.get('password')
         if not paswd:
             return jsonify({"error": "password missing"}), 400
             
@@ -37,6 +37,6 @@ def session_login_handler():
                     
                     return captured_response
                 else:
-                    return jsonify({"error": "wrong password"}), 404
+                    return jsonify({"error": "wrong password"}), 401
         else:
-            return jsonify({"error": "no user found for this email"}), 401
+            return jsonify({"error": "no user found for this email"}), 404
