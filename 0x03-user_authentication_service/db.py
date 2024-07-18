@@ -40,7 +40,6 @@ class DB:
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
-        self._session.close()
         return user
 
     def find_user_by(self, **kwargs) -> User:
@@ -52,7 +51,6 @@ class DB:
         """Updates the user matching the user_id passed
         Updates depends on the arbitary keywords args
         given that will be updated"""
-        
         user = self.find_user_by(id=user_id)
 
         for key, val in kwargs.items():
