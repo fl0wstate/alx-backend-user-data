@@ -19,7 +19,7 @@ def session_login_handler():
         paswd = request.form.get('password')
         if not paswd:
             return jsonify({"error": "password missing"}), 400
-            
+
         from models.user import User
 
         user_by_mail = User.search({"email": email})
@@ -30,12 +30,11 @@ def session_login_handler():
                     from api.v1.app import auth
 
                     user_data = user.to_json()
-                    created_session = auth.create_session(user_data.get('id'))
-                    captured_response = jsonify(user_data)
+                    _session = auth.create_session(user_data.get('id'))
+                    _response = jsonify(user_data)
                     # setting up the cookie inside the response
-                    captured_response.set_cookie(getenv('SESSION_NAME'), created_session)
-                    
-                    return captured_response
+                    _response.set_cookie(getenv('SESSION_NAME'), _session)
+                    return _response
                 else:
                     return jsonify({"error": "wrong password"}), 401
         else:
