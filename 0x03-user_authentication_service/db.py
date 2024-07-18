@@ -41,7 +41,7 @@ class DB:
         self._session.commit()
         return user
 
-    def find_user_by(self, **kwargs: Dict[Any, Any]) -> User:
+    def find_user_by(self, **kwargs) -> User:
         """Finds users from the database
         based on the keyword argumnent passed"""
         return self._session.query(User).filter_by(**kwargs).one()
