@@ -2,8 +2,9 @@
 """ Module of Users session views
 """
 from api.v1.views import app_views
-from flask import jsonify, request
+from flask import abort, jsonify, request
 from os import getenv
+
 
 
 @app_views.route('/auth_session/login',
@@ -39,3 +40,15 @@ def session_login_handler():
                     return jsonify({"error": "wrong password"}), 401
         else:
             return jsonify({"error": "no user found for this email"}), 404
+
+@app_views.route('/auth_session/logout/',
+                 methods=['DELETE'],
+                 strict_slashes = False)
+def session_logout_handler():
+    """Handles cleaning up for session id when the user logsout"""
+    from api.v1.app import auth
+
+    if auth.destroy_session(request):
+        return jsonify({}), 200
+    else: 
+        abort(404)
