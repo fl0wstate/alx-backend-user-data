@@ -2,12 +2,11 @@
 """DB module
 """
 from sqlalchemy import create_engine
-from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from user import Base, User
-from typing import Any, Dict
 
 
 class DB:
@@ -42,6 +41,19 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs) -> User:
-        """Finds users from the database
-        based on the keyword argumnent passed"""
+        """ Find user by key word arguments
+            NoResultFound and InvalidRequestError are raised when
+            - no results are found, or
+            - wrong query arguments are passed,
+            respectively.
+
+            Args:
+                **kwargs: key word arguments
+            Raises:
+                NoResultFound - when no results are found
+                InvalidRequestError - when wrong query arguments are passed
+
+            Returns:
+                User object
+        """
         return self._session.query(User).filter_by(**kwargs).one()
