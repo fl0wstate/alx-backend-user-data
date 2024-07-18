@@ -27,7 +27,6 @@ if auth_type:
             }
 
     try:
-        print(environ_auth_type[auth_type])
         auth = environ_auth_type[auth_type]()
     except Exception as e:
         write(1, b"Error finding environment variable :")
@@ -70,9 +69,7 @@ def before_request():
     if not auth.require_auth(request.path, auth_paths):
         return
     if not auth.authorization_header(request):
-        print(auth.authorization_header(request))
         if not auth.session_cookie(request):
-            print(auth.session_cookie(request))
             abort(401)
     current_user = auth.current_user(request)
     if not current_user:

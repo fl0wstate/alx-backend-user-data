@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 """Creating a session cookie"""
 
 from .auth import Auth
@@ -51,3 +51,4 @@ class SessionAuth(Auth):
             return found_user
         except Exception:
             return None
+
