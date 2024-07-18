@@ -44,9 +44,4 @@ class DB:
     def find_user_by(self, **kwargs: Dict[Any, Any]) -> User:
         """Finds users from the database
         based on the keyword argumnent passed"""
-        user = self._session.query(User).filter_by(**kwargs).first()
-        if user is None:
-            raise NoResultFound
-        if user == 'invalid':
-            raise InvalidRequestError
-        return user
+        return self._session.query(User).filter_by(**kwargs).one()
