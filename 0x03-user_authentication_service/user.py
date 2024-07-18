@@ -16,3 +16,10 @@ class User(Base):
     hashed_password = Column('hashed_password', String(250), nullable=False)
     session_id = Column('session_id', String(250), nullable=True)
     reset_token = Column('reset_token', String(250), nullable=True)
+
+
+
+print(User.__tablename__)
+
+for column in User.__table__.columns:
+    print("{}: {}".format(column, column.type))
