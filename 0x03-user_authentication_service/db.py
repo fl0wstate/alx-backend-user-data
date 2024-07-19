@@ -8,6 +8,7 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
+from sqlalchemy.util import has_dupes
 from user import Base, User
 
 
@@ -37,6 +38,8 @@ class DB:
             Return:
                 returns the user object added to the database
         """
+        if not email or not hashed_password:
+            raise ValueError("Invalid params")
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
         self._session.commit()
