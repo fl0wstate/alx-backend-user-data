@@ -26,9 +26,9 @@ class Auth:
         registered to the datbase"""
         # find the user by email
         try:
-            user = self._db.find_user_by(email=email)
+            self._db.find_user_by(email=email)
             raise ValueError(f"User {email} already exists")
         except NoResultFound:
             pass
         hashed_pass = _hash_password(password)
-        return self._db.add_user(email, hashed_pass)
+        return self._db.add_user(email, str(hashed_pass))
