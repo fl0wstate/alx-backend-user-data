@@ -32,4 +32,4 @@ class Auth:
         except NoResultFound:
             pass
         hashed_pass = _hash_password(password)
-        return self._db.add_user(email, hashed_pass.decode('utf-8'))
+        return self._db.add_user(email, hashed_pass)
