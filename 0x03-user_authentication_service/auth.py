@@ -15,7 +15,7 @@ def _hash_password(password: str) -> bytes:
             bcrypt.gensalt())
 
 
-def _generate_uuid():
+def _generate_uuid() -> str:
     """returns a uuid string representation"""
     return str(uuid.uuid4())
 
