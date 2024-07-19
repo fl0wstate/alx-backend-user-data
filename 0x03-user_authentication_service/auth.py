@@ -2,7 +2,7 @@
 """Hashing password method"""
 
 import bcrypt
-from sqlalchemy.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError, NoResultFound
 from db import DB
 from user import User
 
@@ -10,7 +10,7 @@ from user import User
 def _hash_password(password: str) -> bytes:
     """Hashes the password given through bcrypt"""
     return bcrypt.hashpw(
-            password.encode('utf-8'),
+            password.encode(),
             bcrypt.gensalt())
 
 
@@ -19,6 +19,7 @@ class Auth:
     """
 
     def __init__(self):
+        """Constructor for the datbase function"""
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
@@ -28,7 +29,22 @@ class Auth:
         try:
             self._db.find_user_by(email=email)
             raise ValueError(f"User {email} already exists")
-        except NoResultFound:
+        except (InvalidRequestError, NoResultFound):
             pass
+
         hashed_pass = _hash_password(password)
-        return self._db.add_user(email, str(hashed_pass))
+        return self._db.add_user(email, hashed_pass)
+
+    def valid_login(self, email: str, password: str) -> bool:
+        """checks for matching passwords"""
+        if not email or not password:
+            return False
+        try:
+            user = self._db.find_user_by(email=email)
+            if (bcrypt.checkpw(
+                user.hashed_password,
+                password.encode()
+            )):
+                return True
+        except (InvalidRequestError, NoResultFound):
+            return False
