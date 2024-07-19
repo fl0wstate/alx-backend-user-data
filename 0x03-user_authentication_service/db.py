@@ -51,9 +51,12 @@ class DB:
         Updates depends on the arbitary keywords args
         given that will be updated"""
         user = self.find_user_by(id=user_id)
+        if not user:
+            return None
 
         for key, val in kwargs.items():
             if not hasattr(User, key):
                 raise ValueError
             else:
                 setattr(user, key, val)
+        self._session.commit()
