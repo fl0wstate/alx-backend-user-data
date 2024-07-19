@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Hashing password method"""
-
 import bcrypt
-from sqlalchemy.exc import InvalidRequestError, NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
 from db import DB
 from user import User
 import uuid
