@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Hashing password method"""
+from typing import Optional
 import bcrypt
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
@@ -54,3 +55,34 @@ class Auth:
                 return True
         except (InvalidRequestError, NoResultFound):
             return False
+
+    def create_session(self, email: str) -> str:
+        """creates a new session_id for user matching the email address"""
+        if email:
+            try:
+                user = self._db.find_user_by(email=email)
+                new_session_id = _generate_uuid()
+                self._db.update_user(user.id, session_id=new_session_id)
+            except (InvalidRequestError, NoResultFound):
+                return None
+            return new_session_id
+        else:
+            return None
+
+    def get_user_from_session_id(
+            self, session_id: str) -> Optional[User | None]:
+        """Returns a user based on the session_id given"""
+        if session_id is None:
+            return None
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
+        except (InvalidRequestError, NoResultFound):
+            return None
+
+    def destroy_session(self, user_id: int) -> None:
+        """destroying user id session id"""
+        if user_id:
+            self._db.update_user(user_id, session_id=None)
+        else:
+            return None
