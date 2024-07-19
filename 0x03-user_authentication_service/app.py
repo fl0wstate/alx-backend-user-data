@@ -6,9 +6,10 @@ from flask import Flask, jsonify
 app = Flask(__name__)
 
 
-@app.route('/',
-          methods=['GET'],
-          strict_slashes=False)
+@app.route(
+    '/',
+    methods=['GET'],
+    strict_slashes=False)
 def root():
     """returns the root page for the flask app"""
     return jsonify({"message": "Bienvenue"})
@@ -16,4 +17,3 @@ def root():
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
-
