@@ -7,7 +7,7 @@ PASSWD = "b4l0u"
 NEW_PASSWD = "t4rt1fl3tt3"
 BASE_URL = 'http://localhost:5000'
 
-# my test code goes here
+
 def register_user(email: str, password: str) -> None:
     """Getting all the registered register_user but filtering
     them according to the email provided"""
