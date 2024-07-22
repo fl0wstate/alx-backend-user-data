@@ -19,23 +19,23 @@ def root():
 @app.route('/users', methods=['POST'], strict_slashes=False)
 def users():
     """Handling users endpoint"""
-    if request.form:
-        email = request.form.get('email')
-        password = request.form.get('password')
+    email = request.form.get('email')
+    password = request.form.get('password')
 
-        try:
-            user = AUTH.register_user(email, password)
-            return jsonify({
-                "email": user.email,
-                "message": "user created"
-            }), 200
-        except ValueError:
-            # respond with something
-            return jsonify({
-                "message": "email already registered"
-            }), 400
-    else:
+    if not email or not password:
         abort(400)
+
+    try:
+        user = AUTH.register_user(email, password)
+        return jsonify({
+            "email": user.email,
+            "message": "user created"
+        }), 200
+    except ValueError:
+        # respond with something
+        return jsonify({
+            "message": "email already registered"
+        }), 400
 
 
 @app.route('/login', methods=['POST'], strict_slashes=False)
