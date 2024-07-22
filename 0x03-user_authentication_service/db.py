@@ -46,7 +46,7 @@ class DB:
         based on the keyword argumnent passed"""
         return self._session.query(User).filter_by(**kwargs).one()
 
-    def update_user(self, user_id: int, **kwargs: Dict[str, str]) -> None:
+    def update_user(self, user_id: int, **kwargs: Dict[str, str]):
         """Updates the user matching the user_id passed
         Updates depends on the arbitary keywords args
         given that will be updated"""
