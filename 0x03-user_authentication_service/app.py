@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """flask app"""
 from jinja2 import StrictUndefined
+from sqlalchemy.sql.operators import op
 from auth import Auth
 from flask import abort, Flask, jsonify, request, redirect
 
@@ -92,6 +93,26 @@ def profile():
             abort(403)
     else:
         abort(403)
+
+
+@app.route(
+    '/reset_password',
+    methods=['POST'],
+    strict_slashes=False
+)
+def get_reset_password_token():
+    """generates a new token for the user
+    to create an new password"""
+    mail = request.form.get('email')
+    if mail:
+        reset_token = AUTH.get_reset_password_token(mail)
+        if reset_token:
+            return jsonify({
+                "email": mail,
+                "reset_token": reset_token
+            }), 200
+        else:
+            abort(403)
 
 
 if __name__ == "__main__":
