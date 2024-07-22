@@ -28,7 +28,7 @@ def users():
             return jsonify({
                 "email": f"{user.email}",
                 "message": "user created"
-            })
+            }), 200
         except ValueError:
             # respond with something
             return jsonify({
