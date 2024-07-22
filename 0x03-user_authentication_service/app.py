@@ -3,8 +3,8 @@
 from flask import Flask, jsonify, request, abort
 from auth import Auth
 
-app = Flask(__name__)
 AUTH = Auth()
+app = Flask(__name__)
 
 
 @app.route(
@@ -26,7 +26,7 @@ def users():
         try:
             user = AUTH.register_user(email, password)
             return jsonify({
-                "email": f"{user.email}",
+                "email": user.email,
                 "message": "user created"
             }), 200
         except ValueError:
@@ -34,6 +34,8 @@ def users():
             return jsonify({
                 "message": "email already registered"
             }), 400
+    else:
+        abort(400)
 
 
 @app.route('/login', methods=['POST'], strict_slashes=False)
@@ -48,7 +50,7 @@ def login():
 
         # create the session id
         new_session_id = AUTH.create_session(email)
-        captured_response =  jsonify({
+        captured_response = jsonify({
             "email": "user.email",
             "message": "logged in"
         })
