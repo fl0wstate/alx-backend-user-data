@@ -39,26 +39,22 @@ def users():
     }), 200
 
 
-@app.route('/login', methods=['POST'], strict_slashes=False)
+@app.route('/sessions', methods=['POST'], strict_slashes=False)
 def login():
     """Handling longging in users"""
-    if request.form:
-        email = request.form.get('email')
-        pwd = request.form.get('password')
+    email = request.form.get('email')
+    pwd = request.form.get('password')
 
-        if not AUTH.valid_login(email, pwd):
-            abort(401)
+    if not AUTH.valid_login(email, pwd):
+        abort(401)
 
-        # create the session id
-        new_session_id = AUTH.create_session(email)
-        captured_response = jsonify({
-            "email": "user.email",
-            "message": "logged in"
-        }), 200
-        captured_response.set_cookie("session_id", new_session_id)
-        return captured_response
-    else:
-        return
+    new_session_id = AUTH.create_session(email)
+    captured_response = jsonify({
+        "email": "user.email",
+        "message": "logged in"
+    })
+    captured_response.set_cookie("session_id", new_session_id)
+    return captured_response
 
 
 if __name__ == "__main__":
