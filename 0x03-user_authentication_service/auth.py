@@ -70,7 +70,7 @@ class Auth:
             return None
 
     def get_user_from_session_id(
-            self, session_id: str) -> Optional[User | None]:
+            self, session_id: str) -> User:
         """Returns a user based on the session_id given"""
         if session_id is None:
             return None
