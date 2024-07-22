@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 """Hashing password method"""
-from typing import Optional
 import bcrypt
 from sqlalchemy.exc import InvalidRequestError
 from sqlalchemy.orm.exc import NoResultFound
@@ -84,3 +83,13 @@ class Auth:
             self._db.update_user(user_id, session_id=None)
         else:
             return None
+
+    def get_reset_password_token(self, email: str) -> str:
+        """Generates a reset token for the user table according
+        to the email provided"""
+        if email:
+            try:
+                user = self._db.find_user_by(email=email)
+                self._db.update_user(user.id, reset_token=_generate_uuid())
+            except Exception:
+                raise ValueError
