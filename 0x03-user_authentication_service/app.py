@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""flask app"""
-from jinja2 import StrictUndefined
-from sqlalchemy.sql.operators import op
+"""flask app for handling user Authentication"""
 from auth import Auth
 from flask import abort, Flask, jsonify, request, redirect
 
@@ -117,8 +115,18 @@ def get_reset_password_token():
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
 def update_password():
-    """endpoint for handling password reset for all the users
-    currently requesting password reset"""
+    """endpoint for handling password reset
+    for all the users
+    currently requesting password reset
+    Params:
+        email: user email
+        reset_token: token provided to the user
+        for reseting passowrd
+        new_password: new password for the user
+        to use
+    Return:
+        returns a json response object
+    """
     email = request.form.get('email')
     reset_token = request.form.get('reset_token')
     new_password = request.form.get('new_password')
