@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """flask app"""
+from jinja2 import StrictUndefined
 from auth import Auth
 from flask import abort, Flask, jsonify, request, redirect
 
@@ -73,6 +74,24 @@ def logout():
     # if valid user DELETE session_id`o`
     AUTH.destroy_session(user.id)
     return redirect('/')
+
+
+@app.route('/profile', methods=['GET'], strict_slashes=False)
+def profile():
+    """Gets you the user_data according to the session_id given"""
+    if request.headers:
+        cookie = request.headers.get('Cookie')
+        if cookie:
+            session_id = cookie.split('=')[1]
+            user = AUTH.get_user_from_session_id(session_id)
+            if user:
+                return jsonify({'email': user.email}), 200
+            else:
+                abort(403)
+        else:
+            abort(403)
+    else:
+        abort(403)
 
 
 if __name__ == "__main__":
