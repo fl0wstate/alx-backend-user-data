@@ -105,13 +105,13 @@ def get_reset_password_token():
     to create an new password"""
     mail = request.form.get('email')
     if mail:
-        reset_token = AUTH.get_reset_password_token(mail)
-        if reset_token:
+        try:
+            reset_token = AUTH.get_reset_password_token(mail)
             return jsonify({
                 "email": mail,
                 "reset_token": reset_token
             }), 200
-        else:
+        except Exception:
             abort(403)
 
 
