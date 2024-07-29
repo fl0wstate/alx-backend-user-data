@@ -19,6 +19,7 @@ class SessionExpAuth(SessionAuth):
             self.session_duration = 0
 
     def create_session(self, user_id: str = None) -> str:
+        """creates a new session_dictionary under the user_id given"""
         session_id = super().create_session(user_id)
         if session_id:
             self.user_id_by_session_id[session_id] = {
@@ -29,6 +30,7 @@ class SessionExpAuth(SessionAuth):
         return None
 
     def user_id_for_session_id(self, session_id: str = None) -> str:
+        """returns the user_id based on the session id passed"""
         if not session_id:
             return None
         session_dictionary = self.user_id_by_session_id[session_id]
@@ -37,8 +39,9 @@ class SessionExpAuth(SessionAuth):
                 return session_dictionary.get('user_id')
             if 'created_at' not in session_dictionary:
                 return None
-            if (session_dictionary.get('created_at')) + \
-                    timedelta(seconds=self.session_duration) < datetime.now():
+            exp = session_dictionary['created_at'] + \
+                timedelta(seconds=self.session_duration)
+            if (exp < datetime.now()):
                 return None
             return session_dictionary.get('user_id')
         else:
