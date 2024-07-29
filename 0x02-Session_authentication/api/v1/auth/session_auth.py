@@ -61,12 +61,13 @@ class SessionAuth(Auth):
             return False
         if not self.user_id_for_session_id(SESSION):
             return False
-        print("_____[ SESSION ]____")
-        print(SESSION)
-        print("_____[ DICT ]____")
-        print(self.user_id_by_session_id)
-        print("_____[ VAL ]____")
-        print(self.user_id_by_session_id.get(SESSION))
+        # print("_____[ SESSION ]____")
+        # print(SESSION)
+        # print("_____[ DICT ]____")
+        # print(self.user_id_by_session_id)
+        # print("_____[ VAL ]____")
+        # print(self.user_id_by_session_id.get(SESSION))
+
         if self.user_id_by_session_id.pop(SESSION, None):
-           return True
+            return True
         return True
