@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 """Creating a session cookie"""
 
 from .auth import Auth
@@ -69,10 +69,4 @@ class SessionAuth(Auth):
         print(self.user_id_by_session_id.get(SESSION))
         if self.user_id_by_session_id.pop(SESSION, None):
            return True
-        
-
-
         return True
-
-
-        
